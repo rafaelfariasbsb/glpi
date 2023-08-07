@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  db-glpi-10:
+    image: percona/percona-server:5.7
+    container_name: db-glpi-10
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE 
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      TZ: $TZ
+    command: 
+      - --character-set-server=utf8mb4 
+      - --collation-server=utf8mb4_general_ci
+    networks:
+      - traefik
+    volumes:
+      - percona_lib:/var/lib/mysql 
+      - percona_log:/var/log/mysql      
+  glpi-10:
+    image: glpi-senac
+    container_name: glpi-10.0.9
+    privileged: true
+    hostname: $HOSTNAME
+    environment:
+      HOSTNAME: $HOSTNAME
+    links:
+      - db-glpi-10      
+    ports:
+      - 80:80
+    volumes:
+      - ./data/var/lib/glpi/files/data-documents:/var/lib/glpi/files/data-documents
+      - ./data/var/lib/glpi/marketplace:/var/lib/glpi/marketplace
+      - ./data/usr/share/glpi/marketplace:/usr/share/glpi/marketplace
+      - ./data/usr/share/glpi/pics/imagens-custom:/usr/share/glpi/pics/imagens-custom
+      - ./data/usr/share/glpi/plugins:/usr/share/glpi/plugins
+      - ./data/var/lib/glpi/files/_pictures:/var/lib/glpi/files/_picture
+      - ./data/var/lib/glpi/files/_plugins:/var/lib/glpi/files/_plugins
+      - ./data/etc/glpi:/etc/glpi
+      - ./data/backup:/backup
+    networks:
+      - traefik
+  
+networks:
+  traefik:
+    name: traefik
