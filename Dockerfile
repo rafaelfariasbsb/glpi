@@ -31,3 +31,6 @@ RUN mkdir /usr/share/glpi/pics/imagens-custom
 COPY downstream.php /usr/share/glpi/inc/
 RUN systemctl enable httpd
 EXPOSE 443 80 
+COPY glpi-start.sh /opt/
+RUN chmod +x /opt/glpi-start.sh
+ENTRYPOINT ["/opt/glpi-start.sh"]
