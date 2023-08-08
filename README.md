@@ -3,7 +3,7 @@
 Esse projeto baseado na imagem 
 https://hub.docker.com/r/sdbrasil/glpi
 
-GLPi - Instalação via Console
+GLPi - Instalação via Console do GLPI
 
 docker exec -it glpi-10 /bin/bash
 
