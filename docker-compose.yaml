@@ -30,8 +30,9 @@ services:
       - db-glpi-10      
     ports:
       - 80:80
-#    volumes:
+    volumes:
 #      - ./data/var/lib/glpi/files/data-documents:/var/lib/glpi/files/data-documents
+       - glpi_data:/var/lib/glpi/files/data-documents
 #      - ./data/var/lib/glpi/files/_pictures:/var/lib/glpi/files/_picture
 #      - ./data/var/lib/glpi/files/_plugins:/var/lib/glpi/files/_plugins
 #      - ./data/var/lib/glpi/marketplace:/var/lib/glpi/marketplace      
@@ -46,3 +47,6 @@ services:
 networks:
   glpi:
     name: glpi
+volumes:
+  glpi_data:
+    name: glpi_data    
