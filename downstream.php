@@ -13,7 +13,7 @@ defined('GLPI_MARKETPLACE_ALLOW_OVERRIDE') or define('GLPI_MARKETPLACE_ALLOW_OVE
 // runtime data
 defined('GLPI_VAR_DIR')         or define('GLPI_VAR_DIR',         '/var/lib/glpi/files');
 
-define('GLPI_DOC_DIR',        GLPI_VAR_DIR. '/data-documents');
+define('GLPI_DOC_DIR',        GLPI_VAR_DIR . '/data-documents');
 define('GLPI_CRON_DIR',       GLPI_VAR_DIR . '/_cron');
 define('GLPI_DUMP_DIR',       GLPI_VAR_DIR . '/_dumps');
 define('GLPI_GRAPH_DIR',      GLPI_VAR_DIR . '/_graphs');
