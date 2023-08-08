@@ -27,8 +27,10 @@ RUN mv /usr/share/glpi /usr/share/glpi-ori \
     && tar -zxf glpi-10.0.9.tgz -C /tmp/ \
     && mv /tmp/glpi /usr/share/. \
     && rm -rf glpi-10.0.9.tgz
-RUN mkdir /usr/share/glpi/pics/imagens-custom
+RUN mkdir /usr/share/glpi/pics/imagens-custom \
+    && mkdir /var/lib/glpi/files/data-documents
 COPY downstream.php /usr/share/glpi/inc/
+RUN chown -Rf apache:apache /usr/share/glpi/
 RUN systemctl enable httpd
 EXPOSE 443 80 
 COPY glpi-start.sh /opt/

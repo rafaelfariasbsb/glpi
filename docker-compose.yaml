@@ -16,12 +16,12 @@ services:
       - --collation-server=utf8mb4_general_ci
     networks:
       - glpi
-    volumes:
-      - ./data/percona_lib:/var/lib/mysql 
-      - ./data/percona_log:/var/log/mysql      
+#    volumes:
+#      - ./data/percona_lib:/var/lib/mysql 
+#      - ./data/percona_log:/var/log/mysql      
   glpi-10:
     image: glpi-local
-    container_name: glpi-10.0.9
+    container_name: glpi-local
     privileged: true
     hostname: $HOSTNAME
     environment:
@@ -30,16 +30,16 @@ services:
       - db-glpi-10      
     ports:
       - 80:80
-    volumes:
-      - ./data/var/lib/glpi/files/data-documents:/var/lib/glpi/files/data-documents
-      - ./data/var/lib/glpi/marketplace:/var/lib/glpi/marketplace
-      - ./data/usr/share/glpi/marketplace:/usr/share/glpi/marketplace
-      - ./data/usr/share/glpi/pics/imagens-custom:/usr/share/glpi/pics/imagens-custom
-      - ./data/usr/share/glpi/plugins:/usr/share/glpi/plugins
-      - ./data/var/lib/glpi/files/_pictures:/var/lib/glpi/files/_picture
-      - ./data/var/lib/glpi/files/_plugins:/var/lib/glpi/files/_plugins
-      - ./data/etc/glpi:/etc/glpi
-      - ./data/backup:/backup
+#    volumes:
+#      - ./data/var/lib/glpi/files/data-documents:/var/lib/glpi/files/data-documents
+#      - ./data/var/lib/glpi/files/_pictures:/var/lib/glpi/files/_picture
+#      - ./data/var/lib/glpi/files/_plugins:/var/lib/glpi/files/_plugins
+#      - ./data/var/lib/glpi/marketplace:/var/lib/glpi/marketplace      
+#      - ./data/usr/share/glpi/marketplace:/usr/share/glpi/marketplace
+#      - ./data/usr/share/glpi/pics/imagens-custom:/usr/share/glpi/pics/imagens-custom 
+#      - ./data/usr/share/glpi/plugins:/usr/share/glpi/plugins           
+#      - ./data/etc/glpi:/etc/glpi
+#      - ./data/backup:/backup
     networks:
       - glpi
   
