@@ -16,32 +16,29 @@ services:
       - --collation-server=utf8mb4_general_ci
     networks:
       - glpi
-#    volumes:
-#      - ./data/percona_lib:/var/lib/mysql 
-#      - ./data/percona_log:/var/log/mysql      
+    volumes:
+      - percona_lib:/var/lib/mysql 
+      - percona_log:/var/log/mysql      
   glpi-10:
     image: glpi-local
     container_name: glpi-local
     privileged: true
     hostname: $HOSTNAME
     environment:
-      HOSTNAME: $HOSTNAME
+      SSLCERTIFICATEFILE: $SSLCERTIFICATEFILE
+      SSLCERTIFICATEKEYFILE: $SSLCERTIFICATEKEYFILE
     links:
       - db-glpi-10      
     ports:
       - 80:80
       - 443:443
-#    volumes:
-#      - ./data/var/lib/glpi/files/data-documents:/var/lib/glpi/files/data-documents
-#       - glpi_data:/var/lib/glpi/files/data-documents
-#      - ./data/var/lib/glpi/files/_pictures:/var/lib/glpi/files/_picture
-#      - ./data/var/lib/glpi/files/_plugins:/var/lib/glpi/files/_plugins
-#      - ./data/var/lib/glpi/marketplace:/var/lib/glpi/marketplace      
-#      - ./data/usr/share/glpi/marketplace:/usr/share/glpi/marketplace
-#      - ./data/usr/share/glpi/pics/imagens-custom:/usr/share/glpi/pics/imagens-custom 
-#      - ./data/usr/share/glpi/plugins:/usr/share/glpi/plugins           
-#      - ./data/etc/glpi:/etc/glpi
-#      - ./data/backup:/backup
+    volumes:
+      - glpi_lib:/var/lib/glpi     
+      - glpi_share:/usr/share/glpi           
+      - glpi_etc:/etc/glpi
+      - glpi_backup:/backup
+      - certificados:/etc/pki/tls/certs
+      - certificados:/etc/pki/tls/private
     networks:
       - glpi
   
@@ -49,5 +46,18 @@ networks:
   glpi:
     name: glpi
 volumes:
-  glpi_data:
-    name: glpi_data    
+  glpi_share:
+    name: glpi_share
+  glpi_lib:
+    name: glpi_lib
+  glpi_etc:
+    name: glpi_etc
+  glpi_backup:
+    name: glpi_backup
+  percona_lib:
+      name: percona_lib
+  percona_log:
+    name: percona_log
+  certificados:
+    name: certificados
+    external: true
