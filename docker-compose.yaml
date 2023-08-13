@@ -10,7 +10,7 @@ services:
       MYSQL_DATABASE: $MYSQL_DATABASE 
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
-      TZ: $TZ
+      TZ: $TIMEZONE
     command: 
       - --character-set-server=utf8mb4 
       - --collation-server=utf8mb4_general_ci
@@ -27,6 +27,10 @@ services:
     environment:
       SSLCERTIFICATEFILE: $SSLCERTIFICATEFILE
       SSLCERTIFICATEKEYFILE: $SSLCERTIFICATEKEYFILE
+      TIMEZONE: $TIMEZONE
+      VERSION_GLPI: $VERSION_GLPI
+      UPLOAD_MAX_FILESIZE: $UPLOAD_MAX_FILESIZE
+      POST_MAX_SIZE: $POST_MAX_SIZE
     links:
       - db-glpi-10      
     ports:

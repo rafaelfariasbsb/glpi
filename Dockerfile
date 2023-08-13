@@ -15,10 +15,7 @@ RUN mv /etc/httpd/conf.d/glpi.conf /etc/httpd/conf.d/glpi.conf_ori
 COPY glpi.conf /etc/httpd/conf.d/
 COPY ssl.conf /etc/httpd/conf.d/
 COPY index.php /var/www/html
-RUN sed -i 's,;date.timezone =,date.timezone = America/Sao_Paulo,g' /etc/php.ini \
-    && sed -i 's,upload_max_filesize = 2M,upload_max_filesize = 20M,g' /etc/php.ini \
-    && sed -i 's,post_max_size = 8M,post_max_size = 20M,g' /etc/php.ini \
-    && sed -i 's,session.cookie_httponly =,session.cookie_httponly = on,g' /etc/php.ini \
+RUN sed -i 's,session.cookie_httponly =,session.cookie_httponly = on,g' /etc/php.ini \
     && sed -i 's/listen.acl_users = apache,nginx/;listen.acl_users = /g' /etc/php-fpm.d/www.conf \
     && sed -i 's/listen.acl_groups = /;listen.acl_groups = /g' /etc/php-fpm.d/www.conf \
     && sed -i 's/;listen.owner = nobody/listen.owner = apache/g' /etc/php-fpm.d/www.conf \
