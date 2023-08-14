@@ -1,6 +1,6 @@
 #!/bin/bash
 [[ ! "$VERSION_GLPI" ]] \
-	&& VERSION_GLPI=$(curl -s https://api.github.com/repos/glpi-project/glpi/releases/latest | grep tag_name | cut -d '"' -f 4)
+	&& VERSION_GLPI=$(curl -sk https://api.github.com/repos/glpi-project/glpi/releases/latest | grep tag_name | cut -d '"' -f 4)
 
 if [[ -z "${TIMEZONE}" ]]; then echo "TIMEZONE is unset"; 
 else 
@@ -13,12 +13,12 @@ FOLDER_GLPI="/usr/share/glpi"
 TEMP_DIR="/tmp"
 
 # Check if the FOLDER_GLPI directory exists
-if [ ! -d "$FOLDER_GLPI" ]; then
+if [ ! -d "$FOLDER_GLPI/public" ]; then
     echo "Directory $FOLDER_GLPI does not exist. Creating..."
     mkdir -p "$FOLDER_GLPI"
 
     # Download the file
-    SRC_GLPI=$(curl -s https://api.github.com/repos/glpi-project/glpi/releases/tags/${VERSION_GLPI} | jq .assets[0].browser_download_url | tr -d \")
+    SRC_GLPI=$(curl -sk https://api.github.com/repos/glpi-project/glpi/releases/tags/${VERSION_GLPI} | jq .assets[0].browser_download_url | tr -d \")
     TAR_GLPI=$(basename ${SRC_GLPI})
     echo "Downloading the GLPI archive..."
     wget "$SRC_GLPI" -P "$TEMP_DIR"
