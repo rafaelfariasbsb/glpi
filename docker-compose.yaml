@@ -1,0 +1,67 @@
+version: '3.9'
+
+services:
+  db-glpi-10:
+    image: percona/percona-server:5.7
+    container_name: db-glpi-10
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE 
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      TZ: $TIMEZONE
+    command: 
+      - --character-set-server=utf8mb4 
+      - --collation-server=utf8mb4_general_ci
+    networks:
+      - glpi
+    volumes:
+      - percona_lib:/var/lib/mysql 
+      - percona_log:/var/log/mysql      
+  glpi-10:
+    image: glpi-local
+    container_name: glpi-local
+    privileged: true
+    hostname: $HOSTNAME
+    environment:
+      SSLCERTIFICATEFILE: $SSLCERTIFICATEFILE
+      SSLCERTIFICATEKEYFILE: $SSLCERTIFICATEKEYFILE
+      TIMEZONE: $TIMEZONE
+      VERSION_GLPI: $VERSION_GLPI
+      UPLOAD_MAX_FILESIZE: $UPLOAD_MAX_FILESIZE
+      POST_MAX_SIZE: $POST_MAX_SIZE
+    links:
+      - db-glpi-10      
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - glpi_lib:/var/lib/glpi     
+      - glpi_share:/usr/share/glpi           
+      - glpi_etc:/etc/glpi
+      - glpi_backup:/backup
+      - certificados:/etc/pki/tls/certs
+      - certificados:/etc/pki/tls/private
+    networks:
+      - glpi
+  
+networks:
+  glpi:
+    name: glpi
+volumes:
+  glpi_share:
+    name: glpi_share
+  glpi_lib:
+    name: glpi_lib
+  glpi_etc:
+    name: glpi_etc
+  glpi_backup:
+    name: glpi_backup
+  percona_lib:
+      name: percona_lib
+  percona_log:
+    name: percona_log
+  certificados:
+    name: certificados
+    external: true
