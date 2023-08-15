@@ -1,6 +1,6 @@
 #!/bin/bash
 [[ ! "$VERSION_GLPI" ]] \
-	&& VERSION_GLPI=$(curl -s https://api.github.com/repos/glpi-project/glpi/releases/latest | grep tag_name | cut -d '"' -f 4)
+	&& VERSION_GLPI=$(curl -sk https://api.github.com/repos/glpi-project/glpi/releases/latest | grep tag_name | cut -d '"' -f 4)
 
 if [[ -z "${TIMEZONE}" ]]; then echo "TIMEZONE is unset"; 
 else 
@@ -8,36 +8,32 @@ else
 fi
 
 
-# Define variables
-FOLDER_GLPI="/usr/share/glpi"
-TEMP_DIR="/tmp"
 
-# Check if the FOLDER_GLPI directory exists
-if [ ! -d "$FOLDER_GLPI" ]; then
-    echo "Directory $FOLDER_GLPI does not exist. Creating..."
-    mkdir -p "$FOLDER_GLPI"
+
+# Check if the /usr/share/glpi/public directory exists
+if [ ! -d "/usr/share/glpi/public" ]; then
+    echo "Directory /usr/share/glpi/public does not exist. Creating..."
+    mkdir -p "/usr/share/glpi/"
 
     # Download the file
-    SRC_GLPI=$(curl -s https://api.github.com/repos/glpi-project/glpi/releases/tags/${VERSION_GLPI} | jq .assets[0].browser_download_url | tr -d \")
+    SRC_GLPI=$(curl -sk https://api.github.com/repos/glpi-project/glpi/releases/tags/${VERSION_GLPI} | jq .assets[0].browser_download_url | tr -d \")
     TAR_GLPI=$(basename ${SRC_GLPI})
     echo "Downloading the GLPI archive..."
-    wget "$SRC_GLPI" -P "$TEMP_DIR"
+    wget "$SRC_GLPI" -P "/tmp"
 
     # Check if the download was successful
-    if [ -e "$TEMP_DIR/$TAR_GLPI" ]; then
+    if [ -e "/tmp/$TAR_GLPI" ]; then
         echo "Download successful."
 
         # Extract the archive
         echo "Extracting the archive..."
-        tar -xzvf "$TEMP_DIR/$TAR_GLPI" -C "$TEMP_DIR"
+        tar -xzvf "/tmp/$TAR_GLPI" -C /usr/share/
 
-        # Move to the FOLDER_GLPI directory
-        mv "$TEMP_DIR/glpi" "$FOLDER_GLPI"
 
         # Delete the compressed archive
-        rm -f "$TEMP_DIR/$TAR_GLPI"
+        rm -f "/tmp/$TAR_GLPI"
 
-        mkdir /usr/share/glpi/pics/imagens-custom /var/lib/glpi/files/data-documents 
+        mkdir -p /usr/share/glpi/pics/imagens-custom /var/lib/glpi/files/data-documents 
        # create the downstream.php file
 
         
@@ -72,9 +68,13 @@ if [ ! -d "$FOLDER_GLPI" ]; then
         echo "define('GLPI_SYSTEM_CRON', true);" >> /usr/share/glpi/inc/downstream.php     
         echo "" >> /usr/share/glpi/inc/downstream.php
 
+        rm -rf /var/log/glpi/* 
         # Change owner of the public folder to apache:apache
-        chown -Rf apache:apache "$FOLDER_GLPI/public"
-        chown -Rf apache:apache /var/lib/glpi/files 
+        chown -Rf apache:apache /usr/share/glpi/public/
+        chown -Rf apache:apache /usr/share/glpi/marketplace/
+        chown -Rf apache:apache /var/lib/glpi/files/
+        chown -Rf apache:apache /var/log/glpi/
+        
 
         # Change permission of the glpi and files folder
 
@@ -88,7 +88,7 @@ if [ ! -d "$FOLDER_GLPI" ]; then
         echo "Error downloading the GLPI archive."
     fi
 else
-    echo "Directory $FOLDER_GLPI already exists. Skipping installation."
+    echo "Directory /usr/share/glpi/ already exists. Skipping installation."
 fi
 
 
