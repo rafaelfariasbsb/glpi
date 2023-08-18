@@ -7,11 +7,13 @@ RUN dnf -y install yum-plugin-copr && dnf -y copr enable ligenix/enterprise-glpi
 RUN dnf -y module reset php \
     && dnf -y module install php:remi-8.1
 RUN dnf -y install net-tools wget yum-utils bzip2 unzip tar patch php-pecl-zendopcache \
-    php-opcache php-pecl-apcu php-soap php-xmlrpc php-pear-CAS php-snmp php-sodium glpi jq curl mod_ssl
-RUN mv /etc/httpd/conf.d/glpi.conf /etc/httpd/conf.d/glpi.conf_ori
-RUN mv /usr/share/glpi /usr/share/glpi_ori
+    php-opcache php-pecl-apcu php-soap php-xmlrpc php-pear-CAS php-snmp php-sodium glpi jq curl mod_ssl mysql
 COPY glpi.conf /etc/httpd/conf.d/
 COPY ssl.conf /etc/httpd/conf.d/
+COPY downstream.php /usr/share/glpi/inc/
+COPY backup_glpi.sh /opt/
+RUN chmod +x /opt/backup_glpi.sh
+RUN mkdir -p /usr/share/glpi/pics/imagens-custom /var/lib/glpi/files/data-documents
 RUN sed -i 's,session.cookie_httponly =,session.cookie_httponly = on,g' /etc/php.ini \
     && sed -i 's,;session.cookie_secure =,session.cookie_secure = on,g' /etc/php.ini \
     && sed -i 's/listen.acl_users = apache,nginx/;listen.acl_users = /g' /etc/php-fpm.d/www.conf \
