@@ -8,13 +8,17 @@ RUN dnf -y module reset php \
     && dnf -y module install php:remi-8.1
 RUN dnf -y install net-tools wget yum-utils bzip2 unzip tar patch php-pecl-zendopcache \
     php-opcache php-pecl-apcu php-soap php-xmlrpc php-pear-CAS php-snmp php-sodium glpi jq curl mod_ssl mysql
+ADD https://github.com/glpi-project/glpi/releases/download/10.0.9/glpi-10.0.9.tgz /tmp/ 
+RUN rm -Rf /usr/share/glpi \
+    && cd /tmp \
+    && tar -zxf glpi-10.0.9.tgz -C /tmp/ \
+    && mv /tmp/glpi /usr/share/. \
+    && rm -rf glpi-10.0.9.tgz  
 COPY glpi.conf /etc/httpd/conf.d/
 COPY ssl.conf /etc/httpd/conf.d/
 COPY downstream.php /usr/share/glpi/inc/
 COPY php.ini /etc/
 COPY www.conf /etc/php-fpm.d/ 
-COPY backup_glpi.sh /opt/
-RUN chmod +x /opt/backup_glpi.sh
 RUN mkdir -p /usr/share/glpi/pics/imagens-custom /var/lib/glpi/files/data-documents
 COPY glpi-start.sh /opt/
 RUN chmod +x /opt/glpi-start.sh

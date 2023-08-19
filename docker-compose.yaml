@@ -28,7 +28,6 @@ services:
       SSLCERTIFICATEFILE: $SSLCERTIFICATEFILE
       SSLCERTIFICATEKEYFILE: $SSLCERTIFICATEKEYFILE
       TIMEZONE: $TIMEZONE
-      VERSION_GLPI: $VERSION_GLPI
       UPLOAD_MAX_FILESIZE: $UPLOAD_MAX_FILESIZE
       POST_MAX_SIZE: $POST_MAX_SIZE
       MYSQL_DATABASE: $MYSQL_DATABASE 
@@ -42,7 +41,7 @@ services:
       - 443:443
     volumes:
       - glpi_lib:/var/lib/glpi     
-      - glpi_share:/usr/share/glpi           
+      - glpi_marketplace:/usr/share/glpi/marketplace           
       - glpi_etc:/etc/glpi
       - glpi_backup:/backup
       - certificados:/etc/pki/tls/certs
@@ -54,8 +53,8 @@ networks:
   glpi:
     name: glpi
 volumes:
-  glpi_share:
-    name: glpi_share
+  glpi_marketplace:
+    name: glpi_marketplace
   glpi_lib:
     name: glpi_lib
   glpi_etc:
