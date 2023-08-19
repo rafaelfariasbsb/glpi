@@ -3,7 +3,7 @@ version: '3.9'
 services:
   db-glpi-10:
     image: percona/percona-server:5.7
-    container_name: db-glpi-10
+    container_name: $MYSQL_CONTAINER_NAME
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
@@ -31,8 +31,12 @@ services:
       VERSION_GLPI: $VERSION_GLPI
       UPLOAD_MAX_FILESIZE: $UPLOAD_MAX_FILESIZE
       POST_MAX_SIZE: $POST_MAX_SIZE
-    links:
-      - db-glpi-10      
+      MYSQL_DATABASE: $MYSQL_DATABASE 
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD  
+      MYSQL_CONTAINER_NAME: $MYSQL_CONTAINER_NAME    
+    depends_on:
+      - $MYSQL_CONTAINER_NAME   
     ports:
       - 80:80
       - 443:443
