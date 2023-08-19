@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -x
+
 [[ ! "$VERSION_GLPI" ]] \
 	&& VERSION_GLPI=$(curl -sk https://api.github.com/repos/glpi-project/glpi/releases/latest | grep tag_name | cut -d '"' -f 4)
 

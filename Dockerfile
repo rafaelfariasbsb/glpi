@@ -11,17 +11,12 @@ RUN dnf -y install net-tools wget yum-utils bzip2 unzip tar patch php-pecl-zendo
 COPY glpi.conf /etc/httpd/conf.d/
 COPY ssl.conf /etc/httpd/conf.d/
 COPY downstream.php /usr/share/glpi/inc/
+COPY php.ini /etc/
+COPY www.conf /etc/php-fpm.d/ 
 COPY backup_glpi.sh /opt/
 RUN chmod +x /opt/backup_glpi.sh
 RUN mkdir -p /usr/share/glpi/pics/imagens-custom /var/lib/glpi/files/data-documents
-RUN sed -i 's,session.cookie_httponly =,session.cookie_httponly = on,g' /etc/php.ini \
-    && sed -i 's,;session.cookie_secure =,session.cookie_secure = on,g' /etc/php.ini \
-    && sed -i 's/listen.acl_users = apache,nginx/;listen.acl_users = /g' /etc/php-fpm.d/www.conf \
-    && sed -i 's/listen.acl_groups = /;listen.acl_groups = /g' /etc/php-fpm.d/www.conf \
-    && sed -i 's/;listen.owner = nobody/listen.owner = apache/g' /etc/php-fpm.d/www.conf \
-    && sed -i 's/;listen.group = nobody/listen.group = apache/g' /etc/php-fpm.d/www.conf   
-EXPOSE 80 443 
 COPY glpi-start.sh /opt/
 RUN chmod +x /opt/glpi-start.sh
-#ENTRYPOINT ["/usr/sbin/init","-D","FOREGROUND"]
+EXPOSE 80 443 
 ENTRYPOINT ["/opt/glpi-start.sh"]
