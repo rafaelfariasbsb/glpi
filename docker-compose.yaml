@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   db-glpi-10:
-    image: percona/percona-server:5.7
+    image: percona/percona-server:latest
     container_name: $MYSQL_CONTAINER_NAME
     restart: always
     environment:
@@ -20,7 +20,7 @@ services:
       - percona_lib:/var/lib/mysql 
       - percona_log:/var/log/mysql      
   glpi-10:
-    image: glpi-local
+    build: .
     container_name: glpi-local
     privileged: true
     hostname: $HOSTNAME

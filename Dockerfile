@@ -13,21 +13,21 @@ RUN rm -Rf /usr/share/glpi \
     && cd /tmp \
     && tar -zxf glpi-10.0.9.tgz -C /tmp/ \
     && mv /tmp/glpi /usr/share/. \
-    && rm -rf glpi-10.0.9.tgz  
+    && rm -rf glpi-10.0.9.tgz \
+    && mkdir -p /usr/share/glpi/pics/imagens-custom /var/lib/glpi/files/data-documents \
+    && chown -Rf apache:apache /usr/share/glpi/marketplace/ \           
+    && chown -Rf apache:apache /usr/share/glpi/public/ \
+    && chown -Rf apache:apache /var/lib/glpi/files/ \
+    && chown -Rf apache:apache /var/log/glpi/ \
+    && find /usr/share/glpi/ -type d -exec chmod 755 {} \; \
+    && find /usr/share/glpi/ -type f -exec chmod 644 {} \; \ 
+    && find /var/lib/glpi/files/ -type d -exec chmod 755 {} \; \
+    && find /var/lib/glpi/files/ -type f -exec chmod 644 {} \;    
 COPY glpi.conf /etc/httpd/conf.d/
 COPY ssl.conf /etc/httpd/conf.d/
 COPY downstream.php /usr/share/glpi/inc/
 COPY php.ini /etc/
 COPY www.conf /etc/php-fpm.d/ 
-RUN mkdir -p /usr/share/glpi/pics/imagens-custom /var/lib/glpi/files/data-documents
-RUN chown -Rf apache:apache /usr/share/glpi/marketplace/ \           
-&& chown -Rf apache:apache /usr/share/glpi/public/ \
-&& chown -Rf apache:apache /var/lib/glpi/files/ \
-&& chown -Rf apache:apache /var/log/glpi/ \
-&& find /usr/share/glpi/ -type d -exec chmod 755 {} \; \
-&& find /usr/share/glpi/ -type f -exec chmod 644 {} \; \ 
-&& find /var/lib/glpi/files/ -type d -exec chmod 755 {} \; \
-&& find /var/lib/glpi/files/ -type f -exec chmod 644 {} \;   
 COPY glpi-start.sh /opt/
 RUN chmod +x /opt/glpi-start.sh
 EXPOSE 80 443 
