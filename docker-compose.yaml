@@ -44,8 +44,7 @@ services:
       - glpi_marketplace:/usr/share/glpi/marketplace           
       - glpi_etc:/etc/glpi
       - glpi_backup:/backup
-      - certificados:/etc/pki/tls/certs
-      - certificados:/etc/pki/tls/private
+      - certificados:/tmp/certificado
     networks:
       - glpi
   
